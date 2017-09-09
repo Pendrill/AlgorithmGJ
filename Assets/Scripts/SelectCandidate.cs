@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.UI;
+using UnityEngine.UI;
 
 /// <summary>
 /// This script will check on whether the player has clicked on a candidate.
@@ -9,17 +9,19 @@ using UnityEngine;
 /// </summary>
 public class SelectCandidate : MonoBehaviour {
 
-    public GameObject[] candidates = new GameObject[4];
+    public GameObject[] candidates = new GameObject[4], candidatePrefabs;
     public int currentDisplayedCandidate = 2, lastDisplayedCandidate = 0;
-    public enum GameState { wait, moveRight, moveLeft };
+    public enum GameState { wait, start, fadeOut, moveRight, moveLeft };
     public GameState currentState;
-    float lastStateChange = 0.0f, time = 0.0f;
+    float lastStateChange = 0.0f, time = 0.0f, alpha;
     public float leftPosition, centerPosition, rightPosition;
-    public GameObject buttonRight, buttonLeft;
+    public GameObject buttonRight, buttonLeft; 
+    public Image blackFader;
     bool interactable = true;
 	// Use this for initialization
 	void Start () {
-        setCurrentState(GameState.wait);
+        turnLeftRightOff();
+        setCurrentState(GameState.start);
 	}
 	
 	// Update is called once per frame
@@ -35,12 +37,41 @@ public class SelectCandidate : MonoBehaviour {
             {
                 //save a temp reference of the object that got hit
                 GameObject tempHit = hit.transform.gameObject;
-                Debug.Log(tempHit.name);
+                //Debug.Log(tempHit.name);
             }
         }
 
         switch (currentState)
         {
+            case GameState.start:
+                //do the initializing stuff
+                for (int i = 1; i < candidates.Length; i++)
+                {
+                    GameObject tempCandidate = Instantiate(candidatePrefabs[Random.Range(0, candidatePrefabs.Length - 1)], new Vector3(1000,1,0), Quaternion.identity);
+                    candidates[i] = tempCandidate;
+                }
+                candidates[2].transform.position = new Vector2(centerPosition, 1);
+
+                //fade out of black
+
+                setCurrentState(GameState.fadeOut);
+                time = 0.0f;
+                               
+                break;
+
+            case GameState.fadeOut:
+                //do the fade out
+                time += Time.deltaTime / 2;
+                Color tmp = blackFader.color;
+                alpha = Mathf.Lerp(1.0f, 0.0f, time / 2);
+                tmp.a = alpha;
+                blackFader.color = tmp;
+                if (getStateElapsed() > 4.0f)
+                {
+                    setCurrentState(GameState.wait);
+                    time = 0.0f;
+                }
+                break;
             case GameState.wait:
                 //do the stuff in wait
                 turnLeftRightOn();
@@ -81,6 +112,7 @@ public class SelectCandidate : MonoBehaviour {
     /// </summary>
     public void moveRight()
     {
+        Debug.Log("Clicked button");
         turnLeftRightOff();
         //keep an index reference of the candidate currently on screen that needs to be moved
         lastDisplayedCandidate = currentDisplayedCandidate;
@@ -149,9 +181,11 @@ public class SelectCandidate : MonoBehaviour {
     }
     void turnLeftRightOff()
     {
+        Debug.Log("is this getting called");
         buttonRight.SetActive(false);
         buttonLeft.SetActive(false);
         interactable = false;
     }
+
     
 }
