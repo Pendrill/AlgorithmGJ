@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+//using UnityEngine.UI;
 
 /// <summary>
 /// This script will check on whether the player has clicked on a candidate.
@@ -8,16 +9,22 @@ using UnityEngine;
 /// </summary>
 public class SelectCandidate : MonoBehaviour {
 
-    public GameObject[] candidates = new GameObject[3];
+    public GameObject[] candidates = new GameObject[4];
     public int currentDisplayedCandidate = 2, lastDisplayedCandidate = 0;
+    public enum GameState { wait, moveRight, moveLeft };
+    public GameState currentState;
+    float lastStateChange = 0.0f, time = 0.0f;
+    public float leftPosition, centerPosition, rightPosition;
+    public GameObject buttonRight, buttonLeft;
 	// Use this for initialization
 	void Start () {
-		
+        setCurrentState(GameState.wait);
 	}
 	
 	// Update is called once per frame
 	void Update () {
         //once the left mouse button if pressed 
+        //Debug.Log(currentState);
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //we send a racayst in 2d space originating from the mouse position
@@ -27,8 +34,44 @@ public class SelectCandidate : MonoBehaviour {
             {
                 //save a temp reference of the object that got hit
                 GameObject tempHit = hit.transform.gameObject;
-                Debug.Log(tempHit.name);
+                //Debug.Log(tempHit.name);
             }
+        }
+
+        switch (currentState)
+        {
+            case GameState.wait:
+                //do the stuff in wait
+                
+                time = 0.0f;
+                break;
+
+            case GameState.moveLeft:
+                //do the stuff in moveleft
+                time += Time.deltaTime / 2;
+                candidates[lastDisplayedCandidate].transform.position = new Vector2(Mathf.SmoothStep(centerPosition, leftPosition, time), candidates[lastDisplayedCandidate].transform.position.y);
+                candidates[currentDisplayedCandidate].transform.position = new Vector2(Mathf.SmoothStep(rightPosition, centerPosition, time), candidates[currentDisplayedCandidate].transform.position.y);
+
+                if(getStateElapsed() > 2.0f)
+                {
+                    setCurrentState(GameState.wait);
+                    time = 0.0f;
+                }
+                break;
+
+            case GameState.moveRight:
+                //Debug.Log(getStateElapsed());
+                //do the stuff in moveRight
+                time += Time.deltaTime / 2;
+                candidates[lastDisplayedCandidate].transform.position = new Vector2(Mathf.SmoothStep(centerPosition, rightPosition, time), candidates[lastDisplayedCandidate].transform.position.y);
+                candidates[currentDisplayedCandidate].transform.position = new Vector2(Mathf.SmoothStep(leftPosition, centerPosition, time), candidates[currentDisplayedCandidate].transform.position.y);
+
+                if (getStateElapsed() > 2.0f)
+                {
+                    setCurrentState(GameState.wait);
+                    time = 0.0f;
+                }
+                break;
         }
 	}
 
@@ -50,6 +93,7 @@ public class SelectCandidate : MonoBehaviour {
             currentDisplayedCandidate -= 1;
         }
         //set the state to move right
+        setCurrentState(GameState.moveRight);
         
 
     }
@@ -72,6 +116,37 @@ public class SelectCandidate : MonoBehaviour {
             currentDisplayedCandidate += 1;
         }
         //set the state to move left
+        setCurrentState(GameState.moveLeft);
+    }
+
+    /// <summary>
+    /// sets the current state of the game manager
+    /// </summary>
+    /// <param name="state"></param>
+    public void setCurrentState(GameState state)
+    {
+        currentState = state;
+        lastStateChange = Time.time;
+    }
+
+    /// <summary>
+    /// returns the amount of time that has passed since the last state change
+    /// </summary>
+    /// <returns></returns>
+    float getStateElapsed()
+    {
+        return Time.time - lastStateChange;
+    }
+
+    void turnLeftRightOn()
+    {
+        buttonLeft.SetActive(true);
+        buttonRight.SetActive(true);
+    }
+    void turnLeftRightOff()
+    {
+        buttonRight.SetActive(false);
+        buttonLeft.SetActive(false);
     }
     
 }
