@@ -1043,6 +1043,8 @@ MonoBehaviour:
   leftPosition: -12
   centerPosition: 0
   rightPosition: 12
+  buttonRight: {fileID: 1836486931}
+  buttonLeft: {fileID: 426702324}
 --- !u!81 &2108910631
 AudioListener:
   m_ObjectHideFlags: 0

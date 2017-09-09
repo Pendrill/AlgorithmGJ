@@ -42,7 +42,7 @@ public class SelectCandidate : MonoBehaviour {
         {
             case GameState.wait:
                 //do the stuff in wait
-                
+                turnLeftRightOn();
                 time = 0.0f;
                 break;
 
@@ -80,6 +80,7 @@ public class SelectCandidate : MonoBehaviour {
     /// </summary>
     public void moveRight()
     {
+        turnLeftRightOff();
         //keep an index reference of the candidate currently on screen that needs to be moved
         lastDisplayedCandidate = currentDisplayedCandidate;
         //check if this is the first candidate in the array
@@ -103,6 +104,7 @@ public class SelectCandidate : MonoBehaviour {
     /// </summary>
     public void moveLeft()
     {
+        turnLeftRightOff();
         //keep an index reference of the candidate currently on screen that needs to be moved
         lastDisplayedCandidate = currentDisplayedCandidate;
         //check if this is the last candidate in the array
