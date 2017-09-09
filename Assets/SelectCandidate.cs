@@ -16,6 +16,7 @@ public class SelectCandidate : MonoBehaviour {
     float lastStateChange = 0.0f, time = 0.0f;
     public float leftPosition, centerPosition, rightPosition;
     public GameObject buttonRight, buttonLeft;
+    bool interactable = true;
 	// Use this for initialization
 	void Start () {
         setCurrentState(GameState.wait);
@@ -30,11 +31,11 @@ public class SelectCandidate : MonoBehaviour {
             //we send a racayst in 2d space originating from the mouse position
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             //we check if it hits anything
-            if(hit)
+            if(hit && interactable)
             {
                 //save a temp reference of the object that got hit
                 GameObject tempHit = hit.transform.gameObject;
-                //Debug.Log(tempHit.name);
+                Debug.Log(tempHit.name);
             }
         }
 
@@ -144,11 +145,13 @@ public class SelectCandidate : MonoBehaviour {
     {
         buttonLeft.SetActive(true);
         buttonRight.SetActive(true);
+        interactable = true;
     }
     void turnLeftRightOff()
     {
         buttonRight.SetActive(false);
         buttonLeft.SetActive(false);
+        interactable = false;
     }
     
 }
