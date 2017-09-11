@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// This script will check on whether the player has clicked on a candidate.
-/// if so, it will proceed.
+/// This is our Game Manager Script.
+/// This will instatiate an random set of candidates
+/// Let the player shuffle through them
+/// Let the player selct one of them
 /// </summary>
 public class SelectCandidate : MonoBehaviour {
 
@@ -18,16 +20,19 @@ public class SelectCandidate : MonoBehaviour {
     public GameObject buttonRight, buttonLeft; 
     public Image blackFader;
     bool interactable = true;
+
 	// Use this for initialization
 	void Start () {
+        //we make sure the left and right buttons are off
         turnLeftRightOff();
+        //set the current state to the starting state
         setCurrentState(GameState.start);
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        //if the player wants to select a candidate
         //once the left mouse button if pressed 
-        //Debug.Log(currentState);
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             //we send a racayst in 2d space originating from the mouse position
@@ -44,16 +49,16 @@ public class SelectCandidate : MonoBehaviour {
         switch (currentState)
         {
             case GameState.start:
-                //do the initializing stuff
+                //Spawn a set of candidated
                 for (int i = 1; i < candidates.Length; i++)
                 {
                     GameObject tempCandidate = Instantiate(candidatePrefabs[Random.Range(0, candidatePrefabs.Length - 1)], new Vector3(1000,1,0), Quaternion.identity);
                     candidates[i] = tempCandidate;
                 }
+                //have the middle candidate be in the center of the screen
                 candidates[2].transform.position = new Vector2(centerPosition, 1);
 
                 //fade out of black
-
                 setCurrentState(GameState.fadeOut);
                 time = 0.0f;
                                
@@ -61,45 +66,58 @@ public class SelectCandidate : MonoBehaviour {
 
             case GameState.fadeOut:
                 //do the fade out
+                //The alpha value of the image will lerp from 1 to 0
                 time += Time.deltaTime / 2;
                 Color tmp = blackFader.color;
                 alpha = Mathf.Lerp(1.0f, 0.0f, time / 2);
                 tmp.a = alpha;
                 blackFader.color = tmp;
+                //Wait 4 seconds
                 if (getStateElapsed() > 4.0f)
                 {
+                    //Set the current state to wait
                     setCurrentState(GameState.wait);
                     time = 0.0f;
                 }
                 break;
+            //Resets values and essentially is a state of limbo where nothing happens
             case GameState.wait:
                 //do the stuff in wait
                 turnLeftRightOn();
                 time = 0.0f;
                 break;
 
+            //Move the candidates to the left
             case GameState.moveLeft:
                 //do the stuff in moveleft
                 time += Time.deltaTime / 2;
+                //smoothstep the position of the candidate from the center to the left
                 candidates[lastDisplayedCandidate].transform.position = new Vector2(Mathf.SmoothStep(centerPosition, leftPosition, time), candidates[lastDisplayedCandidate].transform.position.y);
+                //smoothstep the position of the candidate from the right to the center
                 candidates[currentDisplayedCandidate].transform.position = new Vector2(Mathf.SmoothStep(rightPosition, centerPosition, time), candidates[currentDisplayedCandidate].transform.position.y);
 
+                //wait 2 seconds
                 if(getStateElapsed() > 2.0f)
                 {
+                    //set gamestate to wait
                     setCurrentState(GameState.wait);
                     time = 0.0f;
                 }
                 break;
-
+            //Move candidates to the right
             case GameState.moveRight:
                 //Debug.Log(getStateElapsed());
                 //do the stuff in moveRight
                 time += Time.deltaTime / 2;
+                //smoothstep the position of the candidate from the center to the right
                 candidates[lastDisplayedCandidate].transform.position = new Vector2(Mathf.SmoothStep(centerPosition, rightPosition, time), candidates[lastDisplayedCandidate].transform.position.y);
+                //smoothstep the position of the candidate from the left to the center
                 candidates[currentDisplayedCandidate].transform.position = new Vector2(Mathf.SmoothStep(leftPosition, centerPosition, time), candidates[currentDisplayedCandidate].transform.position.y);
 
+                //wait 2 seconds
                 if (getStateElapsed() > 2.0f)
                 {
+                    //set the state to wait
                     setCurrentState(GameState.wait);
                     time = 0.0f;
                 }
@@ -173,12 +191,18 @@ public class SelectCandidate : MonoBehaviour {
         return Time.time - lastStateChange;
     }
 
+    /// <summary>
+    /// turns the buttons that enables the player to go through each candidate on
+    /// </summary>
     void turnLeftRightOn()
     {
         buttonLeft.SetActive(true);
         buttonRight.SetActive(true);
         interactable = true;
     }
+    /// <summary>
+    /// turns the buttons that enables the player to go through each candidate off
+    /// </summary>
     void turnLeftRightOff()
     {
         Debug.Log("is this getting called");
