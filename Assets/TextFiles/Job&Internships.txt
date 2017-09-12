@@ -1,4 +1,4 @@
-Vice President of Smash Club in HighSchool Class in High School,0
+Vice President of Smash Club in HighSchool,0
 Helped Friends Debug and Fix their games,1
 TA for Intro to Computer Science in College,2
 Founder of Computer Programming Club in High School and College,3
@@ -26,7 +26,7 @@ Helped Manage Booths at Game Design Festival,2
 Freelance Writer at Kotaku,3
 Modded KeyBlades and Lightsabers into Skyrim,4
 Taught at a Game Design BootCamp for young kids,5
-Part of the Locolization Team for Capcom's Mobile Division,6
+Part of the Localization Team for Capcom's Mobile Division,6
 Computer Systems Analyst for 2 years at IBM,7
 Developer for multiple Free-to-Play games at Nexon,8
 Lead Programmer for a Startup's Recently Released VR Project,9

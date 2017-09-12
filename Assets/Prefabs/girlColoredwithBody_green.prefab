@@ -91,6 +91,7 @@ MonoBehaviour:
   UI_Experience: {fileID: 0}
   UI_Languages: {fileID: 0}
   UI_Compability: {fileID: 0}
+  gender: 1
 --- !u!212 &212383515234007996
 SpriteRenderer:
   m_ObjectHideFlags: 1
