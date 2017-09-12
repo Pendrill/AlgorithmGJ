@@ -11,17 +11,20 @@ using UnityEngine.UI;
 /// </summary>
 public class SelectCandidate : MonoBehaviour {
 
+    public Camera theCamera;
     public GameObject[] candidates = new GameObject[4], candidatePrefabs;
-    public string[] M_Names_Array, F_Names_Array, lastName_Array;
-    public TextAsset M_Names, F_Names, lastName;
+    public string[] M_Names_Array, F_Names_Array, lastName_Array, UniversitiesArray, SkillsArray, LanguagesArray, ExperienceArray;
+    public TextAsset M_Names, F_Names, lastName, Universities, Skills, Languages, Experience;
+    public Text startingText;
     public int currentDisplayedCandidate = 2, lastDisplayedCandidate = 0;
-    public enum GameState { wait, start, fadeOut, moveRight, moveLeft };
+    public enum GameState { wait, start, fadeOut, moveRight, moveLeft, moveDown, moveUp, fadeIn };
     public GameState currentState;
     float lastStateChange = 0.0f, time = 0.0f, alpha;
-    public float leftPosition, centerPosition, rightPosition;
-    public GameObject buttonRight, buttonLeft;
+    public float leftPosition, centerPosition, rightPosition, OriginalCameraPosition, DownCameraPosition;
+    public GameObject buttonRight, buttonLeft, resumeText, hire, keepSearching;
     public Image blackFader;
     bool interactable = true;
+    string startText;
 
     // Use this for initialization
     void Start() {
@@ -40,6 +43,22 @@ public class SelectCandidate : MonoBehaviour {
         {
             lastName_Array = lastName.text.Split(' ');
         }
+        if (Languages != null)
+        {
+            LanguagesArray = Languages.text.Split('\n');
+        }
+        if (Universities != null)
+        {
+            UniversitiesArray = Universities.text.Split('\n');
+        }
+        if (Experience!= null)
+        {
+            ExperienceArray = Experience.text.Split('\n');
+        }
+        if (Skills != null)
+        {
+            SkillsArray = Skills.text.Split('\n');
+        }
         setCurrentState(GameState.start);
     }
 
@@ -56,6 +75,8 @@ public class SelectCandidate : MonoBehaviour {
             {
                 //save a temp reference of the object that got hit
                 GameObject tempHit = hit.transform.gameObject;
+                tempHit.GetComponent<Candidates>().setText();
+                setCurrentState(GameState.moveDown);
                 //Debug.Log(tempHit.name);
             }
         }
@@ -64,33 +85,69 @@ public class SelectCandidate : MonoBehaviour {
         {
             case GameState.start:
                 //Spawn a set of candidated
+
+                startText = "Please hire the Candidate you think is most fit for the job";
+                currentDisplayedCandidate = 2;
                 for (int i = 1; i < candidates.Length; i++)
                 {
-                    GameObject tempCandidate = Instantiate(candidatePrefabs[Random.Range(0, candidatePrefabs.Length - 1)], new Vector3(1000, 1, 0), Quaternion.identity);
+                    GameObject tempCandidate = Instantiate(candidatePrefabs[Random.Range(0, candidatePrefabs.Length - 1)], new Vector3(1000, 4, 0), Quaternion.identity);
                     candidates[i] = tempCandidate;
+                    
                 }
                 //have the middle candidate be in the center of the screen
-                candidates[2].transform.position = new Vector2(centerPosition, 1);
+                candidates[2].transform.position = new Vector2(centerPosition, 4);
 
                 //fade out of black
                 setCurrentState(GameState.fadeOut);
                 time = 0.0f;
+
+                
 
                 break;
 
             case GameState.fadeOut:
                 //do the fade out
                 //The alpha value of the image will lerp from 1 to 0
-                time += Time.deltaTime / 2;
-                Color tmp = blackFader.color;
-                alpha = Mathf.Lerp(1.0f, 0.0f, time / 2);
-                tmp.a = alpha;
-                blackFader.color = tmp;
+                startingText.text = startText;
+                if (getStateElapsed() > 3.0f)
+                {
+                    startText = "";
+                    time += Time.deltaTime / 2;
+                    Color tmp = blackFader.color;
+                    alpha = Mathf.Lerp(1.0f, 0.0f, time / 2);
+                    tmp.a = alpha;
+                    blackFader.color = tmp;
+                }
                 //Wait 4 seconds
-                if (getStateElapsed() > 4.0f)
+                if (getStateElapsed() > 3.1f)
+                {
+                    //Set the current state to wait
+                    resumeText.SetActive(false);
+                }
+                if (getStateElapsed() > 7.0f)
                 {
                     //Set the current state to wait
                     setCurrentState(GameState.wait);
+                    time = 0.0f;
+                }
+                break;
+
+            case GameState.fadeIn:
+                time += Time.deltaTime / 2;
+                Color tmp2 = blackFader.color;
+                alpha = Mathf.Lerp(0.0f, 1.0f, time / 2);
+                tmp2.a = alpha;
+                blackFader.color = tmp2;
+                if (getStateElapsed() > 4.0f)
+                {
+                    //Set the current state to wait
+                    for(int i = 1; i< candidates.Length; i++)
+                    {
+                        Destroy(candidates[i]);
+                    }
+                    theCamera.transform.position = new Vector3(0, 0, -10);
+                    resumeText.SetActive(true);
+                    setCurrentState(GameState.start);
                     time = 0.0f;
                 }
                 break;
@@ -129,6 +186,30 @@ public class SelectCandidate : MonoBehaviour {
                 candidates[currentDisplayedCandidate].transform.position = new Vector2(Mathf.SmoothStep(leftPosition, centerPosition, time), candidates[currentDisplayedCandidate].transform.position.y);
 
                 //wait 2 seconds
+                if (getStateElapsed() > 2.0f)
+                {
+                    //set the state to wait
+                    setCurrentState(GameState.wait);
+                    time = 0.0f;
+                }
+                break;
+
+            case GameState.moveDown:
+                turnLeftRightOff();
+                time += Time.deltaTime / 2;
+                theCamera.transform.position = new Vector3(theCamera.transform.position.x, Mathf.SmoothStep(OriginalCameraPosition, DownCameraPosition, time), -10);
+                if (getStateElapsed() > 2.0f)
+                {
+                    //Debug.Log("Does this get accessed");
+                    hire.SetActive(true);
+                    keepSearching.SetActive(true);
+                    resumeText.SetActive(true);
+                }
+                break;
+
+            case GameState.moveUp:
+                time += Time.deltaTime / 2;
+                theCamera.transform.position = new Vector3(theCamera.transform.position.x, Mathf.SmoothStep( DownCameraPosition, OriginalCameraPosition, time), -10);
                 if (getStateElapsed() > 2.0f)
                 {
                     //set the state to wait
@@ -244,6 +325,73 @@ public class SelectCandidate : MonoBehaviour {
         return fullName;
     }
 
+    public string genenerateExperience(Candidates currentCandidate)
+    {
+        string experience = "";
+        for(int i = 0; i <3; i++)
+        {
+            string tempExperience = ExperienceArray[Random.Range(0, ExperienceArray.Length)];
+            //Debug.Log(tempSkill);
+            string[] tempExperienceArray = tempExperience.Split(',');
+            experience += tempExperienceArray[0] + "\n";
+            currentCandidate.percentage += int.Parse(tempExperienceArray[1]);
+        }
 
-    
+        return experience;
+    }
+    public string generateSkills( Candidates currentCandidate, int numberOfSkills)
+    {
+        string skill = "";
+        for (int i = 0; i < numberOfSkills; i++)
+        {
+            string tempSkill = SkillsArray[Random.Range(0, SkillsArray.Length)];
+            string[] tempSkillArray = tempSkill.Split(',');
+            skill += tempSkillArray[0] + " ";
+            currentCandidate.percentage += int.Parse(tempSkillArray[1]);
+        }
+        return skill;
+    }
+
+    public string generateLanguages(Candidates currentCandidate, int numberOfLanguages)
+    {
+        string languages = "";
+        for (int i = 0; i < numberOfLanguages; i++)
+        {
+            string tempLanguage = LanguagesArray[Random.Range(0, LanguagesArray.Length)];
+            string[] tempLanguageArray = tempLanguage.Split(',');
+            languages += tempLanguageArray[0] + " ";
+            currentCandidate.percentage += int.Parse(tempLanguageArray[1]);
+        }
+        return languages;
+    }
+    public string generateUniversity(Candidates currentCandidate)
+    {
+        string University = "";
+        
+        string tempUniversity = UniversitiesArray[Random.Range(0, UniversitiesArray.Length)];
+        string[] tempUniversityArray = tempUniversity.Split(',');
+        University += tempUniversityArray[0] + "\n";
+        currentCandidate.percentage += int.Parse(tempUniversityArray[1]);
+        
+        return University;
+    }
+    public void moveUp()
+    {
+        
+        setCurrentState(GameState.moveUp);
+        resumeText.SetActive(false);
+        hire.SetActive(false);
+        keepSearching.SetActive(false);
+        time = 0;
+    }
+    public void Hire()
+    {
+        setCurrentState(GameState.fadeIn);
+        resumeText.SetActive(false);
+        hire.SetActive(false);
+        keepSearching.SetActive(false);
+        time = 0;
+    }
+
+
 }

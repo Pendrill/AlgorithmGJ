@@ -1,0 +1,13 @@
+French,4
+Spanish,8
+Mandarin,9
+Cantonese,9
+Portuguese,4
+American Sign Language,1
+Russian,3
+Hindi,5
+Japanese,10
+Korean,8
+German,7
+Malay,6
+Punjabi,6

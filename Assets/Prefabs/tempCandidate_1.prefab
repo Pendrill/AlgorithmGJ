@@ -80,6 +80,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameManager: {fileID: 0}
   fullName: 
+  percentage: 0
+  Universities: 
+  Skills: 
+  Experience: 
+  Languages: English
+  UI_Name: {fileID: 0}
+  UI_Uni: {fileID: 0}
+  UI_Skills: {fileID: 0}
+  UI_Experience: {fileID: 0}
+  UI_Languages: {fileID: 0}
+  UI_Compability: {fileID: 0}
 --- !u!212 &212111108155905474
 SpriteRenderer:
   m_ObjectHideFlags: 1

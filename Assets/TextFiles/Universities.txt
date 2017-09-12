@@ -1,0 +1,14 @@
+Community College,3
+Univerisity of Minnesota,4
+University of Miami,5
+Northeastern,6
+NYU,7
+USC,8
+Northwestern,9
+Harvard,10
+Oxford,10
+Cambridge,10
+King's College,8
+Bath,7
+South Hampton,6
+Westminster,5
