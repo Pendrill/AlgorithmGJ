@@ -90,12 +90,12 @@ public class SelectCandidate : MonoBehaviour {
                 currentDisplayedCandidate = 2;
                 for (int i = 1; i < candidates.Length; i++)
                 {
-                    GameObject tempCandidate = Instantiate(candidatePrefabs[Random.Range(0, candidatePrefabs.Length - 1)], new Vector3(1000, 4, 0), Quaternion.identity);
+                    GameObject tempCandidate = Instantiate(candidatePrefabs[Random.Range(0, candidatePrefabs.Length - 1)], new Vector3(1000, 1, 0), Quaternion.identity);
                     candidates[i] = tempCandidate;
                     
                 }
                 //have the middle candidate be in the center of the screen
-                candidates[2].transform.position = new Vector2(centerPosition, 4);
+                candidates[2].transform.position = new Vector2(centerPosition, 1);
 
                 //fade out of black
                 setCurrentState(GameState.fadeOut);
