@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4786638411041916}
   - component: {fileID: 212111108155905474}
   - component: {fileID: 61723164969041814}
+  - component: {fileID: 114409742449012082}
   m_Layer: 0
   m_Name: tempCandidate_1
   m_TagString: Untagged
@@ -66,6 +67,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.16}
   m_EdgeRadius: 0
+--- !u!114 &114409742449012082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1750601056668272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69d8e7a8bebe0e6449be9e15a0c262c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameManager: {fileID: 0}
+  fullName: 
 --- !u!212 &212111108155905474
 SpriteRenderer:
   m_ObjectHideFlags: 1

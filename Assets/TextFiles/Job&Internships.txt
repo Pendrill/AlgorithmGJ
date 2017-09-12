@@ -1,0 +1,35 @@
+Vice President of Smash Club in HighSchool Class in High School,0
+Helped Friends Debug and Fix their games,1
+TA for Intro to Computer Science in College,2
+Founder of Computer Programming Club in High School and College,3
+Social Media Manager for Heart Machine LLC,4
+QA tester for SquareEnix,5
+Co-Founder of Video Game Startup,6
+Professor of Game Design at the New School 3 years in a Row,7
+Interned at Amazon and Google over 2 Summers,8
+2 Years as Computer Engineer at Google,9
+5 Years as Senior Sorftware Systems Developer,10
+Youtube Creator with 500 subscribers,0
+Admin for Minecraft Forum,1
+Translated GDC talks regarding System Design,2
+Professional StarCraft II player for 3 years,3
+Wrote Beta Patches and Documentation for Dota 2,4
+Concept Artist for ThatGameCompany and NaughtyDog,5
+Lead Programmer on the Long War Mod for Xcom 2,6
+Wrote Documentation for Steam VR plugin,7
+Junior Level Designer at Ubisoft Montreuil,8
+Game Programmer at PlayDead Studios,9
+Creative Director at Microsoft Studios,10
+Created my own website on SquareSpace,0
+Admin for r/badCode on Reddit,1
+Helped Manage Booths at Game Design Festival,2
+Freelance Writer at Kotaku,3
+Modded KeyBlades and Lightsabers into Skyrim,4
+Taught at a Game Design BootCamp for young kids,5
+Part of the Locolization Team for Capcom's Mobile Division,6
+Computer Systems Analyst for 2 years at IBM,7
+Developer for multiple Free-to-Play games at Nexon,8
+Lead Programmer for a Startup's Recently Released VR Project,9
+Lead Engineer for the Online Infrastucture of GTA Online ,10
+
+

@@ -305,6 +305,12 @@ MonoBehaviour:
   - {fileID: 1854081615876286, guid: ca8349621a2550347b54a6c981966368, type: 2}
   - {fileID: 1840690970407986, guid: ae66613db59efb54183e062338d05424, type: 2}
   - {fileID: 1347427370826392, guid: 4981ff82b6ef5784f8614d172e551f06, type: 2}
+  M_Names_Array: []
+  F_Names_Array: []
+  lastName_Array: []
+  M_Names: {fileID: 4900000, guid: 2c88255a98771524cb168a9a827a71b8, type: 3}
+  F_Names: {fileID: 4900000, guid: 2d14228136b69a24e8af6d90f1ac166d, type: 3}
+  lastName: {fileID: 4900000, guid: 2bd610d05d8156d4b966bc3aff8619f4, type: 3}
   currentDisplayedCandidate: 2
   lastDisplayedCandidate: 0
   currentState: 0
